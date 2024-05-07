@@ -1,10 +1,12 @@
 package pl.polsl.universityfilesender.course;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+
 import lombok.Getter;
 import lombok.Setter;
 import pl.polsl.universityfilesender.user.User;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Getter

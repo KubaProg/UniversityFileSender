@@ -1,6 +1,6 @@
 package pl.polsl.universityfilesender.userassignmentrelationship;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import pl.polsl.universityfilesender.assignment.Assignment;

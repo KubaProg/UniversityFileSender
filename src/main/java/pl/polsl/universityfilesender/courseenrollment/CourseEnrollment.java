@@ -1,10 +1,12 @@
 package pl.polsl.universityfilesender.courseenrollment;
 
-import jakarta.persistence.*;
+
 import lombok.Getter;
 import lombok.Setter;
 import pl.polsl.universityfilesender.course.Course;
 import pl.polsl.universityfilesender.user.User;
+
+import javax.persistence.*;
 
 @Entity
 @Getter

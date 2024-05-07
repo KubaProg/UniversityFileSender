@@ -1,10 +1,12 @@
 package pl.polsl.universityfilesender.submissionfile;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+
 import lombok.Getter;
 import lombok.Setter;
 import pl.polsl.universityfilesender.submission.Submission;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Getter
