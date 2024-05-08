@@ -24,6 +24,7 @@ public class UserAssignmentRelationship {
     @JoinColumn(name = "assignment_id", nullable = false)
     private Assignment assignment;
 
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     public enum Status {

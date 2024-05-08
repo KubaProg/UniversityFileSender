@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.polsl.universityfilesender.assignment.Assignment;
 import pl.polsl.universityfilesender.submissionfile.SubmissionFile;
+import pl.polsl.universityfilesender.userassignmentrelationship.UserAssignmentRelationship;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -25,7 +26,8 @@ public class Submission {
     private Date submissionDate;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
-    private Assignment assignment;
+    @JoinColumn(name = "user_assignment_relationship_id", nullable = false)
+    private UserAssignmentRelationship userAssignmentRelationship;
 
     @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL)
     private Set<SubmissionFile> files = new HashSet<>();
