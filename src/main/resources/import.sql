@@ -1,9 +1,8 @@
 -- Test user (username: janusz, password: password) teacher
-INSERT INTO user (id, username, password, role)
-VALUES (1, 'john', '$2y$10$U9W.2XuqVecQwj/LF7zCbOdBZ4/ri398WSxcq97b9OU7AlXoEkyUK', 'ROLE_TEACHER');
+INSERT INTO app_user (id, username, password, role) VALUES (1, 'john', '$2y$10$U9W.2XuqVecQwj/LF7zCbOdBZ4/ri398WSxcq97b9OU7AlXoEkyUK', 'ROLE_TEACHER');
 
 -- Test user (username: alice, password: password) student
-INSERT INTO user (id, username, password, role) VALUES (2, 'alice', '$2y$10$U9W.2XuqVecQwj/LF7zCbOdBZ4/ri398WSxcq97b9OU7AlXoEkyUK', 'ROLE_STUDENT');
+INSERT INTO app_user (id, username, password, role) VALUES (2, 'alice', '$2y$10$U9W.2XuqVecQwj/LF7zCbOdBZ4/ri398WSxcq97b9OU7AlXoEkyUK', 'ROLE_STUDENT');
 
 
 -- Inserting courses

@@ -17,6 +17,7 @@ import java.util.Collections;
 @Entity
 @Getter
 @Setter
+@Table(name = "app_user")
 public class User implements UserDetails {
 
     public enum Role {
