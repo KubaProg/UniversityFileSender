@@ -7,13 +7,16 @@ import pl.polsl.universityfilesender.user.dto.UserDto;
 public class UserMapper {
 
 
-    public static UserDto toUserDto(User user) {
+    public UserDto toUserDto(User user) {
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
         userDto.setUsername(user.getUsername());
         userDto.setFirstName(user.getFirstName());
         userDto.setLastName(user.getLastName());
+        userDto.setRole(user.getRole().toString());
         return userDto;
     }
+
+
 
 }

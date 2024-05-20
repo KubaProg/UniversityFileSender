@@ -11,10 +11,15 @@ import pl.polsl.universityfilesender.user.dto.UserDto;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository) {
+
+    public UserService(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
+
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
@@ -26,17 +31,7 @@ public class UserService implements UserDetailsService {
             throw new EntityNotFoundException(User.class, "id", "null");
         }
 
-        UserDto userDto = new UserDto();
-
-        userDto.setId(user.getId());
-        userDto.setUsername(user.getUsername());
-        userDto.setFirstName(user.getFirstName());
-        userDto.setLastName(user.getLastName());
-
-        return userDto;
+        return userMapper.toUserDto(user);
     }
-
-
-
 
 }
