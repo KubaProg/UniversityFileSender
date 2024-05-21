@@ -1,5 +1,10 @@
 package pl.polsl.universityfilesender.course.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class CourseDto {
     private Long id;
     private String courseName;
@@ -14,15 +19,5 @@ public class CourseDto {
         this.teacherId = teacherId;
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public String getCourseName() {
-        return courseName;
-    }
-
-    public Long getTeacherId() {
-        return teacherId;
-    }
 }

@@ -3,13 +3,14 @@ package pl.polsl.universityfilesender.user;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.polsl.universityfilesender.course.CourseService;
 import pl.polsl.universityfilesender.course.dto.CourseDto;
+import pl.polsl.universityfilesender.course.dto.SaveCourseRequest;
 import pl.polsl.universityfilesender.user.dto.UserDto;
 
+import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -36,6 +37,13 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_TEACHER')")
     public ResponseEntity<List<CourseDto>> getCurrentUserCourses(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(courseService.getCoursesByTeacher(user));
+    }
+
+
+    @PostMapping("/current/courses")
+    @PreAuthorize("hasRole('ROLE_TEACHER')")
+    public ResponseEntity<CourseDto> saveCourse(@Valid @RequestBody SaveCourseRequest saveCourseRequest, @AuthenticationPrincipal User user) {
+        return ResponseEntity.created(URI.create("/api/courses/" + courseService.saveCourse(user, saveCourseRequest).getId())).build();
     }
 
 

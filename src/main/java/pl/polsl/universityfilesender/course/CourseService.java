@@ -2,6 +2,7 @@ package pl.polsl.universityfilesender.course;
 
 import org.springframework.stereotype.Service;
 import pl.polsl.universityfilesender.course.dto.CourseDto;
+import pl.polsl.universityfilesender.course.dto.SaveCourseRequest;
 import pl.polsl.universityfilesender.exception.EntityNotFoundException;
 import pl.polsl.universityfilesender.user.User;
 
@@ -27,5 +28,13 @@ public class CourseService {
 
         List<Course> courses = courseRepository.findAllByTeacher(teacher);
         return courseMapper.toDtoList(courses);
+    }
+
+    public CourseDto saveCourse(User user, SaveCourseRequest saveCourseRequest) {
+        Course course = new Course();
+        course.setTeacher(user);
+        course.setCourseName(saveCourseRequest.getCourseName());
+        courseRepository.save(course);
+        return courseMapper.toDto(course);
     }
 }
