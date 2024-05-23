@@ -34,9 +34,8 @@ public class UserController {
 
 
     @GetMapping("/current/courses")
-    @PreAuthorize("hasRole('ROLE_TEACHER')")
     public ResponseEntity<List<CourseDto>> getCurrentUserCourses(@AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(courseService.getCoursesByTeacher(user));
+        return ResponseEntity.ok(courseService.getCoursesByUser(user));
     }
 
 

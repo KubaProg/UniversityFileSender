@@ -22,7 +22,7 @@ public class CourseService {
     }
 
 
-    public List<CourseDto> getCoursesByTeacher(User teacher) {
+    public List<CourseDto> getCoursesByUser(User teacher) {
 
         if (teacher == null) {
             throw new EntityNotFoundException(User.class, "id", "null");
