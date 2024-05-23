@@ -1,11 +1,13 @@
 package pl.polsl.universityfilesender.course;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import pl.polsl.universityfilesender.course.dto.CourseDto;
 import pl.polsl.universityfilesender.course.dto.SaveCourseRequest;
 import pl.polsl.universityfilesender.exception.EntityNotFoundException;
 import pl.polsl.universityfilesender.user.User;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -36,5 +38,21 @@ public class CourseService {
         course.setCourseName(saveCourseRequest.getCourseName());
         courseRepository.save(course);
         return courseMapper.toDto(course);
+    }
+
+    public boolean isCourseOwner(Authentication authentication , Long courseId) {
+        User currentUser = (User) authentication.getPrincipal();
+        Course course = getCourse(courseId);
+
+        return currentUser.getId().equals(course.getTeacher().getId());
+    }
+
+    @Transactional
+    public void deleteCourse(Long courseId) {
+        courseRepository.deleteById(courseId);
+    }
+
+    private Course getCourse(Long courseId) {
+        return courseRepository.findById(courseId).orElseThrow(() -> new EntityNotFoundException(Course.class, "id", String.valueOf(courseId)));
     }
 }

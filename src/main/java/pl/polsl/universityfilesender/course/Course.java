@@ -3,11 +3,15 @@ package pl.polsl.universityfilesender.course;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.polsl.universityfilesender.assignment.Assignment;
+import pl.polsl.universityfilesender.courseenrollment.CourseEnrollment;
 import pl.polsl.universityfilesender.user.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -26,4 +30,10 @@ public class Course {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "teacher_id", nullable = false)
     private User teacher;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Assignment> assignments;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CourseEnrollment> courseEnrollments;
 }
