@@ -21,12 +21,12 @@ INSERT INTO assignment (id, assignment_name, description, deadline_date, course_
 -- INSERT INTO submission (id, submission_date) VALUES (NULL, '2024-05-08');
 
 -- Adding user assignment relationships
-INSERT INTO student_assignment_relationship (id, student_id, assignment_id, status) VALUES (NULL, 1, 1, 'PENDING');
-INSERT INTO student_assignment_relationship (id, student_id, assignment_id, status) VALUES (NULL, 1, 2, 'ACCEPTED');
+INSERT INTO student_assignment_relationship (id, student_id, assignment_id, status) VALUES (NULL, 2, 1, 'PENDING');
+INSERT INTO student_assignment_relationship (id, student_id, assignment_id, status) VALUES (NULL, 2, 2, 'ACCEPTED');
 
 
 -- Adding a submission file
-INSERT INTO submission_file (id, student_assignment_relationship_id, file_name) VALUES (NULL, 1, 'example_file.pdf');
+INSERT INTO file (id, student_assignment_relationship_id, file_name) VALUES (NULL, 1, 'example_file.pdf');
 
 
 

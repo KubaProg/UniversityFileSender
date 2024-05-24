@@ -1,9 +1,8 @@
-package pl.polsl.universityfilesender.submissionfile;
+package pl.polsl.universityfilesender.file;
 
 
 import lombok.Getter;
 import lombok.Setter;
-import pl.polsl.universityfilesender.submission.Submission;
 import pl.polsl.universityfilesender.userassignmentrelationship.StudentAssignmentRelationship;
 
 import javax.persistence.*;
@@ -12,15 +11,10 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Getter
 @Setter
-public class SubmissionFile {
+public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-//    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-//    @JoinColumn(name = "submission_id", referencedColumnName = "id", nullable = false)
-//    private Submission submission;
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "student_assignment_relationship_id", nullable = false)
     private StudentAssignmentRelationship studentAssignmentRelationship;

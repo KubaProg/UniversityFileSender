@@ -1,13 +1,12 @@
 package pl.polsl.universityfilesender.userassignmentrelationship;
 
-import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import pl.polsl.universityfilesender.assignment.Assignment;
-import pl.polsl.universityfilesender.submission.Submission;
-import pl.polsl.universityfilesender.submissionfile.SubmissionFile;
+import pl.polsl.universityfilesender.file.File;
 import pl.polsl.universityfilesender.user.User;
 
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,12 +28,8 @@ public class StudentAssignmentRelationship {
     @JoinColumn(name = "assignment_id", nullable = false)
     private Assignment assignment;
 
-//    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JoinColumn(name = "submission_id")
-//    private Submission submission;
-
     @OneToMany(mappedBy = "studentAssignmentRelationship", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<SubmissionFile> files = new HashSet<>();
+    private Set<File> files = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     private Status status;
