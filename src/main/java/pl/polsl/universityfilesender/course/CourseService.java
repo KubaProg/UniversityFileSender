@@ -22,14 +22,24 @@ public class CourseService {
     }
 
 
-    public List<CourseDto> getCoursesByUser(User teacher) {
+    public List<CourseDto> getCoursesByUser(User user) {
 
-        if (teacher == null) {
+        if (user == null) {
             throw new EntityNotFoundException(User.class, "id", "null");
         }
 
-        List<Course> courses = courseRepository.findAllByTeacher(teacher);
-        return courseMapper.toDtoList(courses);
+        // If the user is a teacher, return all courses taught by the teacher
+        if (user.getRole().equals(User.Role.ROLE_TEACHER)) {
+            return courseMapper.toDtoList(courseRepository.findAllByTeacher(user));
+        }
+
+        // If the user is a student, return all courses enrolled by the student
+        if (user.getRole().equals(User.Role.ROLE_STUDENT)) {
+            return courseMapper.toDtoList(courseRepository.findAllByStudentId(user.getId()));
+        }
+
+        return null;
+
     }
 
     public CourseDto saveCourse(User user, SaveCourseRequest saveCourseRequest) {

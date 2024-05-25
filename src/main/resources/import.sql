@@ -1,4 +1,4 @@
--- Test user (username: janusz, password: password) teacher
+-- Test user (username: john, password: password) teacher
 INSERT INTO app_user (id, username, password,first_name,last_name, role) VALUES (NULL, 'john', '$2y$10$U9W.2XuqVecQwj/LF7zCbOdBZ4/ri398WSxcq97b9OU7AlXoEkyUK','John','Doe', 'ROLE_TEACHER');
 
 -- Test user (username: alice, password: password) student
@@ -16,9 +16,6 @@ INSERT INTO course_enrollment (id, student_id, course_id, status) VALUES (NULL, 
 -- Adding an assignments
 INSERT INTO assignment (id, assignment_name, description, deadline_date, course_id) VALUES (NULL, 'First Assignment', 'Complete the exercises from chapters 1-3', '2024-06-01', 1);
 INSERT INTO assignment (id, assignment_name, description, deadline_date, course_id) VALUES (NULL, 'Second Assignment', 'Complete the exercises from chapters 4-6', '2024-06-01', 1);
-
--- -- Adding a submission
--- INSERT INTO submission (id, submission_date) VALUES (NULL, '2024-05-08');
 
 -- Adding user assignment relationships
 INSERT INTO student_assignment_relationship (id, student_id, assignment_id, status) VALUES (NULL, 2, 1, 'PENDING');
