@@ -2,6 +2,8 @@ package pl.polsl.universityfilesender.userassignmentrelationship;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class StudentAssignmentRelationshipService {
 
@@ -10,6 +12,10 @@ public class StudentAssignmentRelationshipService {
 
     public StudentAssignmentRelationshipService(StudentAssignmentRelationshipRepository studentAssignmentRelationshipRepository) {
         this.studentAssignmentRelationshipRepository = studentAssignmentRelationshipRepository;
+    }
+
+    public List<StudentAssignmentRelationship> findAllByAssignment(Long assignmentId) {
+        return studentAssignmentRelationshipRepository.findAllByAssignmentId(assignmentId);
     }
 
 }

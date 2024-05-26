@@ -1,7 +1,6 @@
 package pl.polsl.universityfilesender.user;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,8 +9,6 @@ import pl.polsl.universityfilesender.assignment.Assignment;
 import pl.polsl.universityfilesender.assignment.AssignmentService;
 import pl.polsl.universityfilesender.exception.EntityNotFoundException;
 import pl.polsl.universityfilesender.user.dto.UserDto;
-
-import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -41,11 +38,6 @@ public class UserService implements UserDetailsService {
         }
 
         return userMapper.toUserDto(user);
-    }
-
-    public List<UserDto> getStudentsByAssignment(Long assignmentId) {
-        Assignment assignment = assignmentService.getAssignmentById(assignmentId);
-        return userMapper.toUserDto(userRepository.findAllByAssignments(assignment));
     }
 
     public User getTeacherByAssignment(Long assignmentId) {

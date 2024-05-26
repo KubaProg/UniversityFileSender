@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.polsl.universityfilesender.assignment.dto.DetailedAssignmentDto;
+import pl.polsl.universityfilesender.assignment.dto.StudentAndAssignmentStatusDto;
 import pl.polsl.universityfilesender.user.UserService;
-import pl.polsl.universityfilesender.user.dto.UserDto;
 
 import java.util.List;
 
@@ -37,8 +37,8 @@ public class AssignmentController {
 
     @GetMapping("/{assignmentId}/users")
     @PreAuthorize("hasRole('ROLE_TEACHER') and @userService.isAssignmentOwner(authentication, #assignmentId)")
-    public ResponseEntity<List<UserDto>> getStudentsByAssignment(@PathVariable("assignmentId") Long assignmentId) {
-        return ResponseEntity.ok(userService.getStudentsByAssignment(assignmentId));
+    public ResponseEntity<List<StudentAndAssignmentStatusDto>> getStudentsByAssignmentId(@PathVariable("assignmentId") Long assignmentId) {
+        return ResponseEntity.ok(assignmentService.getStudentsWithAssignmentStatus(assignmentId));
     }
 
 }

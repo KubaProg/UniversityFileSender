@@ -3,6 +3,9 @@ package pl.polsl.universityfilesender.assignment;
 import org.springframework.stereotype.Component;
 import pl.polsl.universityfilesender.assignment.dto.AssignmentGetDto;
 import pl.polsl.universityfilesender.assignment.dto.DetailedAssignmentDto;
+import pl.polsl.universityfilesender.assignment.dto.StudentAndAssignmentStatusDto;
+import pl.polsl.universityfilesender.user.UserMapper;
+import pl.polsl.universityfilesender.userassignmentrelationship.StudentAssignmentRelationship;
 import pl.polsl.universityfilesender.userassignmentrelationship.StudentAssignmentRelationshipMapper;
 
 import java.util.List;
@@ -13,8 +16,11 @@ public class AssignmentMapper {
 
     private final StudentAssignmentRelationshipMapper studentAssignmentRelationshipMapper;
 
-    public AssignmentMapper(StudentAssignmentRelationshipMapper studentAssignmentRelationshipMapper) {
+    private final UserMapper userMapper;
+
+    public AssignmentMapper(StudentAssignmentRelationshipMapper studentAssignmentRelationshipMapper, UserMapper userMapper) {
         this.studentAssignmentRelationshipMapper = studentAssignmentRelationshipMapper;
+        this.userMapper = userMapper;
     }
 
 
@@ -40,5 +46,16 @@ public class AssignmentMapper {
         dto.setDeadlineDate(assignment.getDeadlineDate().toString());
         dto.setStudentAssignmentRelationships(studentAssignmentRelationshipMapper.toDto(assignment.getUserAssignmentRelationships()));
         return dto;
+    }
+
+    public StudentAndAssignmentStatusDto toDto(StudentAssignmentRelationship studentAssignmentRelationship) {
+        StudentAndAssignmentStatusDto dto = new StudentAndAssignmentStatusDto();
+        dto.setStudent(userMapper.toUserDto(studentAssignmentRelationship.getStudent()));
+        dto.setStatus(studentAssignmentRelationship.getStatus().toString());
+        return dto;
+    }
+
+    public List<StudentAndAssignmentStatusDto> toDto(List<StudentAssignmentRelationship> studentAssignmentRelationships) {
+        return studentAssignmentRelationships.stream().map(this::toDto).collect(Collectors.toList());
     }
 }
