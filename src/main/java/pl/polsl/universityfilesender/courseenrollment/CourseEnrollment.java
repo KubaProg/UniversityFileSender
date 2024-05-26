@@ -25,9 +25,7 @@ public class CourseEnrollment {
     private Course course;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
-
-    public enum Status {
+    private Status status;public enum Status {
         PENDING, ACCEPTED
     }
 
