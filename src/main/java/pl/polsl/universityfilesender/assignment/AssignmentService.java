@@ -5,6 +5,7 @@ import pl.polsl.universityfilesender.assignment.dto.AssignmentGetDto;
 import pl.polsl.universityfilesender.assignment.dto.DetailedAssignmentDto;
 import pl.polsl.universityfilesender.exception.EntityNotFoundException;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -16,6 +17,11 @@ public class AssignmentService {
     public AssignmentService(AssignmentRepository assignmentRepository, AssignmentMapper assignmentMapper) {
         this.assignmentRepository = assignmentRepository;
         this.assignmentMapper = assignmentMapper;
+    }
+
+    @Transactional
+    public void deleteAssignment(Long assignmentId) {
+        assignmentRepository.deleteById(assignmentId);
     }
 
     public List<AssignmentGetDto> getAllAssignmentsByCourseId(Long courseId) {
