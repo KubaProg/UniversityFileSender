@@ -7,6 +7,7 @@ import pl.polsl.universityfilesender.assignment.dto.StudentAndAssignmentStatusDt
 import pl.polsl.universityfilesender.exception.EntityNotFoundException;
 import pl.polsl.universityfilesender.userassignmentrelationship.StudentAssignmentRelationshipService;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -21,6 +22,11 @@ public class AssignmentService {
         this.assignmentRepository = assignmentRepository;
         this.assignmentMapper = assignmentMapper;
         this.studentAssignmentRelationshipService = studentAssignmentRelationshipService;
+    }
+
+    @Transactional
+    public void deleteAssignment(Long assignmentId) {
+        assignmentRepository.deleteById(assignmentId);
     }
 
     public List<AssignmentGetDto> getAllAssignmentsByCourseId(Long courseId) {

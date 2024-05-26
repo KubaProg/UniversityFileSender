@@ -32,6 +32,11 @@ public class UserController {
         return ResponseEntity.ok(userService.getUser(user));
     }
 
+    @GetMapping({"/{userId}"})
+    public ResponseEntity<UserDto> getUserById(@PathVariable("userId") Long userId) {
+        return ResponseEntity.ok(userService.getUserById(userId));
+    }
+
 
     @GetMapping("/current/courses")
     public ResponseEntity<List<CourseDto>> getCurrentUserCourses(@AuthenticationPrincipal User user) {
