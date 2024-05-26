@@ -28,7 +28,9 @@ public class AssignmentService {
         return assignmentMapper.toDetailedDto(assignment);
     }
 
-    private Assignment getAssignmentById(Long assignmentId) {
+    public Assignment getAssignmentById(Long assignmentId) {
         return assignmentRepository.findById(assignmentId).orElseThrow(() -> new EntityNotFoundException(Assignment.class, "id", assignmentId.toString()));
     }
+
+
 }
