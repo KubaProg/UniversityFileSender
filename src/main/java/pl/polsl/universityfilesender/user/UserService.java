@@ -58,4 +58,9 @@ public class UserService implements UserDetailsService {
         User teacherOfAssignment = getTeacherByAssignment(assignmentId);
         return teacherOfAssignment.getId().equals(currentUser.getId());
     }
+
+    public UserDto getUserById(Long userId) {
+        User userById = userRepository.getById(userId);
+        return userMapper.toUserDto(userById);
+    }
 }
