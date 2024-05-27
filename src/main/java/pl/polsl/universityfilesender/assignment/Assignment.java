@@ -2,12 +2,15 @@ package pl.polsl.universityfilesender.assignment;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 import pl.polsl.universityfilesender.course.Course;
 import pl.polsl.universityfilesender.userassignmentrelationship.StudentAssignmentRelationship;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -20,17 +23,20 @@ public class Assignment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "assignment_name", nullable = false)
+    @Column(name = "assignment_name", nullable = false, length = 255)
+    @Size(max = 255)
     @NotBlank
     private String assignmentName;
 
     @Column(name = "description")
+    @NotBlank
     private String description;
 
 
     @Column(name = "deadline_date", nullable = false)
     @NotNull
-    private Date deadlineDate;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime deadlineDate;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "course_id", nullable = false)

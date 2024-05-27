@@ -2,8 +2,11 @@ package pl.polsl.universityfilesender.assignment;
 
 import org.springframework.stereotype.Service;
 import pl.polsl.universityfilesender.assignment.dto.AssignmentGetDto;
+import pl.polsl.universityfilesender.assignment.dto.AssignmentSaveRequest;
 import pl.polsl.universityfilesender.assignment.dto.DetailedAssignmentDto;
 import pl.polsl.universityfilesender.assignment.dto.StudentAndAssignmentStatusDto;
+import pl.polsl.universityfilesender.course.Course;
+import pl.polsl.universityfilesender.course.CourseRepository;
 import pl.polsl.universityfilesender.exception.EntityNotFoundException;
 import pl.polsl.universityfilesender.userassignmentrelationship.StudentAssignmentRelationshipService;
 
@@ -18,10 +21,13 @@ public class AssignmentService {
 
     private final StudentAssignmentRelationshipService studentAssignmentRelationshipService;
 
-    public AssignmentService(AssignmentRepository assignmentRepository, AssignmentMapper assignmentMapper, StudentAssignmentRelationshipService studentAssignmentRelationshipService) {
+    private final CourseRepository courseRepository;
+
+    public AssignmentService(AssignmentRepository assignmentRepository, AssignmentMapper assignmentMapper, StudentAssignmentRelationshipService studentAssignmentRelationshipService, CourseRepository courseRepository) {
         this.assignmentRepository = assignmentRepository;
         this.assignmentMapper = assignmentMapper;
         this.studentAssignmentRelationshipService = studentAssignmentRelationshipService;
+        this.courseRepository = courseRepository;
     }
 
     @Transactional
@@ -48,4 +54,17 @@ public class AssignmentService {
     }
 
 
+    public AssignmentGetDto saveAssignment(Long courseId, AssignmentSaveRequest assignmentSaveRequest) {
+        Course course = courseRepository.findById(courseId).orElseThrow(() -> new EntityNotFoundException(Course.class, "id", courseId.toString()));
+
+        Assignment assignment = new Assignment();
+        assignment.setAssignmentName(assignmentSaveRequest.getAssignmentName());
+        assignment.setDescription(assignmentSaveRequest.getDescription());
+        assignment.setCourse(course);
+        assignment.setDeadlineDate(assignmentSaveRequest.getDeadlineDate());
+
+        course.getAssignments().add(assignment);
+
+        return assignmentMapper.toDto(assignmentRepository.save(assignment));
+    }
 }
