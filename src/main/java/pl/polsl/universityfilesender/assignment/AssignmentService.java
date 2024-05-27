@@ -8,10 +8,13 @@ import pl.polsl.universityfilesender.assignment.dto.StudentAndAssignmentStatusDt
 import pl.polsl.universityfilesender.course.Course;
 import pl.polsl.universityfilesender.course.CourseRepository;
 import pl.polsl.universityfilesender.exception.EntityNotFoundException;
+import pl.polsl.universityfilesender.userassignmentrelationship.StudentAssignmentRelationship;
 import pl.polsl.universityfilesender.userassignmentrelationship.StudentAssignmentRelationshipService;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class AssignmentService {
@@ -57,14 +60,29 @@ public class AssignmentService {
     public AssignmentGetDto saveAssignment(Long courseId, AssignmentSaveRequest assignmentSaveRequest) {
         Course course = courseRepository.findById(courseId).orElseThrow(() -> new EntityNotFoundException(Course.class, "id", courseId.toString()));
 
+
         Assignment assignment = new Assignment();
         assignment.setAssignmentName(assignmentSaveRequest.getAssignmentName());
         assignment.setDescription(assignmentSaveRequest.getDescription());
         assignment.setCourse(course);
         assignment.setDeadlineDate(assignmentSaveRequest.getDeadlineDate());
 
+        Set<StudentAssignmentRelationship> studentAssignmentRelationships = new HashSet<>();
+        course.getCourseEnrollments().forEach(courseEnrollment -> {
+            StudentAssignmentRelationship studentAssignmentRelationship = new StudentAssignmentRelationship();
+            studentAssignmentRelationship.setAssignment(assignment);
+            studentAssignmentRelationship.setStudent(courseEnrollment.getStudent());
+            studentAssignmentRelationship.setStatus(StudentAssignmentRelationship.Status.PENDING);
+            studentAssignmentRelationships.add(studentAssignmentRelationship);
+        });
+
+        assignment.setUserAssignmentRelationships(studentAssignmentRelationships);
+
+
+        // Add the assignment to the course
         course.getAssignments().add(assignment);
 
+        // Save the assignment
         return assignmentMapper.toDto(assignmentRepository.save(assignment));
     }
 }
