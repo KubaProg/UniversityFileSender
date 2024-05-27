@@ -6,23 +6,16 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.polsl.universityfilesender.assignment.dto.DetailedAssignmentDto;
 import pl.polsl.universityfilesender.assignment.dto.StudentAndAssignmentStatusDto;
-import pl.polsl.universityfilesender.user.UserService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/assignments")
 public class AssignmentController {
-
-
-
-    private final UserService userService;
-
     private final AssignmentService assignmentService;
 
 
-    public AssignmentController(UserService userService, AssignmentService assignmentService) {
-        this.userService = userService;
+    public AssignmentController(AssignmentService assignmentService) {
         this.assignmentService = assignmentService;
     }
 

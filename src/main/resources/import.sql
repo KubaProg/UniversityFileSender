@@ -23,7 +23,7 @@ INSERT INTO student_assignment_relationship (id, student_id, assignment_id, stat
 
 
 -- Adding a submission file
-INSERT INTO file (id, student_assignment_relationship_id, file_name) VALUES (NULL, 1, 'example_file.pdf');
+INSERT INTO file (id, student_assignment_relationship_id, file_name, data) VALUES (NULL, 1, 'example_file.pdf', 1001);
 
 
 

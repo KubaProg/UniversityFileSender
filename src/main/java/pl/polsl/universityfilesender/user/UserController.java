@@ -7,25 +7,30 @@ import org.springframework.web.bind.annotation.*;
 import pl.polsl.universityfilesender.course.CourseService;
 import pl.polsl.universityfilesender.course.dto.CourseDto;
 import pl.polsl.universityfilesender.course.dto.SaveCourseRequest;
+import pl.polsl.universityfilesender.file.FileService;
+import pl.polsl.universityfilesender.file.dto.FileDto;
 import pl.polsl.universityfilesender.user.dto.UserDto;
+import pl.polsl.universityfilesender.userassignmentrelationship.StudentAssignmentRelationshipService;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
     private final CourseService courseService;
 
+    private final FileService fileService;
 
-    public UserController(UserService userService, CourseService courseService) {
+
+    public UserController(UserService userService, CourseService courseService, FileService fileService) {
         this.userService = userService;
         this.courseService = courseService;
+        this.fileService = fileService;
     }
-
 
     @GetMapping("/current")
     public ResponseEntity<UserDto> getCurrentUser(@AuthenticationPrincipal User user) {
@@ -50,5 +55,9 @@ public class UserController {
         return ResponseEntity.created(URI.create("/api/courses/" + courseService.saveCourse(user, saveCourseRequest).getId())).build();
     }
 
-
+    @GetMapping("/{userId}/assignments/{assignmentId}")
+    @PreAuthorize("@userService.isAssignmentOwner(authentication, #assignmentId)")
+    public ResponseEntity<List<FileDto>> downloadAssignment(@PathVariable("userId") Long userId, @PathVariable("assignmentId") Long assignmentId) {
+        return ResponseEntity.ok(fileService.downloadAssignmentFiles(userId, assignmentId));
+    }
 }

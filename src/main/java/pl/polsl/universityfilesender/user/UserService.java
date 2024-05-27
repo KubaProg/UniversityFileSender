@@ -45,14 +45,31 @@ public class UserService implements UserDetailsService {
         return userRepository.findTeacherByAssignment(assignment).orElseThrow(() -> new EntityNotFoundException(User.class, "assignmentId", assignmentId.toString()));
     }
 
+    public User getStudentByAssignment(Long assignmentId) {
+        Assignment assignment = assignmentService.getAssignmentById(assignmentId);
+        return userRepository.findStudentByAssignment(assignment).orElseThrow(() -> new EntityNotFoundException(User.class, "assignmentId", assignmentId.toString()));
+    }
+
     public boolean isAssignmentOwner(Authentication authentication, Long assignmentId) {
         User currentUser = (User) authentication.getPrincipal();
-        User teacherOfAssignment = getTeacherByAssignment(assignmentId);
-        return teacherOfAssignment.getId().equals(currentUser.getId());
+
+        if (currentUser.getRole().equals(User.Role.ROLE_TEACHER)) {
+            User teacherOfAssignment = getTeacherByAssignment(assignmentId);
+            return teacherOfAssignment.getId().equals(currentUser.getId());
+        }
+
+        if (currentUser.getRole().equals(User.Role.ROLE_STUDENT)) {
+            User student = getStudentByAssignment(assignmentId);
+            return student.getId().equals(currentUser.getId());
+        }
+
+        return false;
     }
 
     public UserDto getUserById(Long userId) {
-        User userById = userRepository.getById(userId);
+
+        User userById = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(User.class, "id", userId.toString()));
+
         return userMapper.toUserDto(userById);
     }
 }

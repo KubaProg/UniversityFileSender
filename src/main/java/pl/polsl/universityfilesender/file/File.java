@@ -22,4 +22,8 @@ public class File {
     @Column(name = "file_name", nullable = false)
     @NotBlank
     private String fileName;
+
+    @Lob
+    @Column(name = "data", nullable = false)
+    private byte[] data;
 }
