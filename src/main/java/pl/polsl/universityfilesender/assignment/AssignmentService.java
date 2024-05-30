@@ -71,19 +71,22 @@ public class AssignmentService {
         assignment.setCourse(course);
         assignment.setDeadlineDate(assignmentSaveRequest.getDeadlineDate());
 
-        Set<File> files = assignmentSaveRequest.getFiles().stream().map(file -> {
-            File fileEntity = new File();
-            fileEntity.setFileName(file.getOriginalFilename());
-            fileEntity.setAssignment(assignment);
-            try {
-                fileEntity.setData(file.getBytes());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return fileEntity;
-        }).collect(Collectors.toSet());
+        if(!assignmentSaveRequest.getFiles().isEmpty()){
+            Set<File> files = assignmentSaveRequest.getFiles().stream().map(file -> {
+                File fileEntity = new File();
+                fileEntity.setFileName(file.getOriginalFilename());
+                fileEntity.setAssignment(assignment);
+                try {
+                    fileEntity.setData(file.getBytes());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return fileEntity;
+            }).collect(Collectors.toSet());
 
-        assignment.setFiles(files);
+            assignment.setFiles(files);
+        }
+
 
 
         Set<StudentAssignmentRelationship> studentAssignmentRelationships = new HashSet<>();
