@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import pl.polsl.universityfilesender.assignment.AssignmentService;
 import pl.polsl.universityfilesender.assignment.dto.AssignmentGetDto;
 import pl.polsl.universityfilesender.assignment.dto.AssignmentSaveRequest;
+import pl.polsl.universityfilesender.courseenrollment.CourseEnrollmentService;
+import pl.polsl.universityfilesender.courseenrollment.dto.CourseEnrollmentDetailsDto;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -21,9 +23,12 @@ public class CourseController {
 
     private final AssignmentService assignmentService;
 
-    public CourseController(CourseService courseService, AssignmentService assignmentService) {
+    private final CourseEnrollmentService courseEnrollmentService;
+
+    public CourseController(CourseService courseService, AssignmentService assignmentService, CourseEnrollmentService courseEnrollmentService) {
         this.courseService = courseService;
         this.assignmentService = assignmentService;
+        this.courseEnrollmentService = courseEnrollmentService;
     }
 
 
@@ -46,6 +51,13 @@ public class CourseController {
     @PreAuthorize("@courseService.isCourseOwner(authentication, #courseId) and hasRole('ROLE_TEACHER')")
     public ResponseEntity<AssignmentGetDto> saveAssignment(@PathVariable("courseId") Long courseId,@Valid @ModelAttribute AssignmentSaveRequest assignmentSaveRequest) {
         return ResponseEntity.created(URI.create("/api/assignments/" + assignmentService.saveAssignment(courseId, assignmentSaveRequest).getId())).build();
+    }
+
+
+    @GetMapping("/{courseId}/course-enrollments/pending")
+    @PreAuthorize("@courseService.isCourseOwner(authentication, #courseId) and hasRole('ROLE_TEACHER')")
+    public ResponseEntity<List<CourseEnrollmentDetailsDto>> getPendingEnrollmentsForCourse(@PathVariable("courseId") Long courseId) {
+        return ResponseEntity.ok(courseEnrollmentService.getPendingEnrollmentsForCourse(courseId));
     }
 
 
