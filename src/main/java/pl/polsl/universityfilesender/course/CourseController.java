@@ -59,6 +59,4 @@ public class CourseController {
     public ResponseEntity<List<CourseEnrollmentDetailsDto>> getPendingEnrollmentsForCourse(@PathVariable("courseId") Long courseId) {
         return ResponseEntity.ok(courseEnrollmentService.getPendingEnrollmentsForCourse(courseId));
     }
-
-
 }
