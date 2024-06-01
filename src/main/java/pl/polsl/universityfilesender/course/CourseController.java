@@ -3,12 +3,14 @@ package pl.polsl.universityfilesender.course;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import pl.polsl.universityfilesender.assignment.AssignmentService;
 import pl.polsl.universityfilesender.assignment.dto.AssignmentGetDto;
 import pl.polsl.universityfilesender.assignment.dto.AssignmentSaveRequest;
 import pl.polsl.universityfilesender.courseenrollment.CourseEnrollmentService;
 import pl.polsl.universityfilesender.courseenrollment.dto.CourseEnrollmentDetailsDto;
+import pl.polsl.universityfilesender.user.User;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -59,4 +61,15 @@ public class CourseController {
     public ResponseEntity<List<CourseEnrollmentDetailsDto>> getPendingEnrollmentsForCourse(@PathVariable("courseId") Long courseId) {
         return ResponseEntity.ok(courseEnrollmentService.getPendingEnrollmentsForCourse(courseId));
     }
+
+
+    @PostMapping("/{courseId}/course-enrollments")
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    public ResponseEntity<Void> createPendingEnrollment(@PathVariable("courseId") Long courseId,
+                                                        @AuthenticationPrincipal User student) {
+        CourseEnrollmentDetailsDto enrollment = courseEnrollmentService.createPendingEnrollment(courseId, student);
+        return ResponseEntity.created(URI.create("/api/course-enrollments/" + enrollment.getEnrollmentId())).build();
+    }
+
+
 }
