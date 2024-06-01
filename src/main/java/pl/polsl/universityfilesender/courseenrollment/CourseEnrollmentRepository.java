@@ -10,4 +10,6 @@ public interface CourseEnrollmentRepository extends JpaRepository<CourseEnrollme
 
 
     List<CourseEnrollment> findAllByStatusAndCourseId(CourseEnrollment.Status status, Long courseId);
+
+    List<CourseEnrollment> findAllByStudentIdAndStatus(Long studentId, CourseEnrollment.Status status);
 }

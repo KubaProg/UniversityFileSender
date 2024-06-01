@@ -10,7 +10,6 @@ import pl.polsl.universityfilesender.course.dto.SaveCourseRequest;
 import pl.polsl.universityfilesender.file.FileService;
 import pl.polsl.universityfilesender.file.dto.FileDto;
 import pl.polsl.universityfilesender.user.dto.UserDto;
-import pl.polsl.universityfilesender.userassignmentrelationship.StudentAssignmentRelationshipService;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -59,5 +58,11 @@ public class UserController {
     @PreAuthorize("@userService.isAssignmentOwner(authentication, #assignmentId)")
     public ResponseEntity<List<FileDto>> downloadAssignment(@PathVariable("userId") Long userId, @PathVariable("assignmentId") Long assignmentId) {
         return ResponseEntity.ok(fileService.downloadAssignmentFiles(userId, assignmentId));
+    }
+
+    @GetMapping("/current/courses/pending")
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    public ResponseEntity<List<CourseDto>> getPendingCoursesforCurrentStudent(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(courseService.getPendingCoursesForStudent(user));
     }
 }

@@ -4,21 +4,27 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import pl.polsl.universityfilesender.course.dto.CourseDto;
 import pl.polsl.universityfilesender.course.dto.SaveCourseRequest;
+import pl.polsl.universityfilesender.courseenrollment.CourseEnrollment;
+import pl.polsl.universityfilesender.courseenrollment.CourseEnrollmentRepository;
 import pl.polsl.universityfilesender.exception.EntityNotFoundException;
 import pl.polsl.universityfilesender.user.User;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseService {
 
-    CourseRepository courseRepository;
-    CourseMapper courseMapper;
+    private final CourseRepository courseRepository;
+    private final CourseMapper courseMapper;
 
-    public CourseService(CourseRepository courseRepository, CourseMapper courseMapper) {
+    private final CourseEnrollmentRepository courseEnrollmentRepository;
+
+    public CourseService(CourseRepository courseRepository, CourseMapper courseMapper, CourseEnrollmentRepository courseEnrollmentRepository) {
         this.courseRepository = courseRepository;
         this.courseMapper = courseMapper;
+        this.courseEnrollmentRepository = courseEnrollmentRepository;
     }
 
 
@@ -64,5 +70,15 @@ public class CourseService {
 
     private Course getCourse(Long courseId) {
         return courseRepository.findById(courseId).orElseThrow(() -> new EntityNotFoundException(Course.class, "id", String.valueOf(courseId)));
+    }
+
+    public List<CourseDto> getPendingCoursesForStudent(User user) {
+        List<CourseEnrollment> enrollments = courseEnrollmentRepository.
+                findAllByStudentIdAndStatus(user.getId(), CourseEnrollment.Status.PENDING);
+
+        List<Course> courses = enrollments.stream().map(CourseEnrollment::getCourse).collect(Collectors.toList());
+
+        return courseMapper.toDtoList(courses);
+
     }
 }

@@ -12,7 +12,6 @@ public class CourseMapper {
         return new CourseDto(course.getId(), course.getCourseName(), course.getTeacher().getId());
     }
 
-    // to dto list
     public List<CourseDto> toDtoList(List<Course> courses) {
         return courses.stream().map(this::toDto).collect(Collectors.toList());
     }
