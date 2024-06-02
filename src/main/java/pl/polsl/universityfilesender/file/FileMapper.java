@@ -1,36 +1,37 @@
 package pl.polsl.universityfilesender.file;
 
 import org.springframework.stereotype.Component;
-import pl.polsl.universityfilesender.file.dto.FileDto;
+import pl.polsl.universityfilesender.file.dto.FileDetailsDto;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
 public class FileMapper {
 
 
-    public FileDto toDto(File file) {
+    public FileDetailsDto toDto(File file) {
         if (file == null) {
             return null;
-        } else {
-            FileDto fileDto = new FileDto();
-            fileDto.setId(file.getId());
-            fileDto.setFileName(file.getFileName());
-            return fileDto;
         }
+
+
+        FileDetailsDto fileDetailsDto = new FileDetailsDto();
+        fileDetailsDto.setId(file.getId());
+        fileDetailsDto.setFileName(file.getFileName());
+        fileDetailsDto.setFileType(file.getFileType());
+        return fileDetailsDto;
     }
 
-    public List<FileDto> toDto(Set<File> files) {
+
+    public List<FileDetailsDto> toDtoList(List<File> files) {
         if (files == null) {
             return null;
-        } else {
-            return files.stream()
-                    .map(this::toDto)
-                    .collect(Collectors.toList());
         }
-    }
 
+        return files.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
 
 }

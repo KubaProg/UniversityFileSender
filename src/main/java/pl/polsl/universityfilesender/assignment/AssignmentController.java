@@ -4,7 +4,6 @@ package pl.polsl.universityfilesender.assignment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import pl.polsl.universityfilesender.assignment.dto.AssignmentGetDto;
 import pl.polsl.universityfilesender.assignment.dto.AssignmentSaveRequest;
 import pl.polsl.universityfilesender.assignment.dto.DetailedAssignmentDto;
 import pl.polsl.universityfilesender.assignment.dto.StudentAndAssignmentStatusDto;

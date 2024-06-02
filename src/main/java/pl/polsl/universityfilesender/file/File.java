@@ -3,7 +3,6 @@ package pl.polsl.universityfilesender.file;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.expression.spel.ast.Assign;
 import pl.polsl.universityfilesender.assignment.Assignment;
 import pl.polsl.universityfilesender.userassignmentrelationship.StudentAssignmentRelationship;
 
@@ -31,4 +30,8 @@ public class File {
     @Lob
     @Column(name = "data", nullable = false)
     private byte[] data;
+
+    @Column(name = "file_type", nullable = false)
+    @NotBlank
+    private String fileType;
 }

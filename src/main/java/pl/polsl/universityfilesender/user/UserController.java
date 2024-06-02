@@ -1,14 +1,16 @@
 package pl.polsl.universityfilesender.user;
 
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pl.polsl.universityfilesender.course.CourseService;
 import pl.polsl.universityfilesender.course.dto.CourseDto;
 import pl.polsl.universityfilesender.course.dto.SaveCourseRequest;
 import pl.polsl.universityfilesender.file.FileService;
-import pl.polsl.universityfilesender.file.dto.FileDto;
 import pl.polsl.universityfilesender.user.dto.UserDto;
 
 import javax.validation.Valid;
@@ -54,11 +56,17 @@ public class UserController {
         return ResponseEntity.created(URI.create("/api/courses/" + courseService.saveCourse(user, saveCourseRequest).getId())).build();
     }
 
-    @GetMapping("/{userId}/assignments/{assignmentId}")
+    @GetMapping("/{userId}/assignments/{assignmentId}/download")
     @PreAuthorize("@userService.isAssignmentOwner(authentication, #assignmentId)")
-    public ResponseEntity<List<FileDto>> downloadAssignment(@PathVariable("userId") Long userId, @PathVariable("assignmentId") Long assignmentId) {
-        return ResponseEntity.ok(fileService.downloadAssignmentFiles(userId, assignmentId));
+    public ResponseEntity<ByteArrayResource> downloadAssignment(@PathVariable("userId") Long userId, @PathVariable("assignmentId") Long assignmentId) {
+        ByteArrayResource resource = fileService.downloadAssignmentFiles(userId, assignmentId);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"assignment_files.zip\"")
+                .header(HttpHeaders.CONTENT_TYPE, "application/zip")
+                .body(resource);
     }
+
 
     @GetMapping("/current/courses/pending")
     @PreAuthorize("hasRole('ROLE_STUDENT')")

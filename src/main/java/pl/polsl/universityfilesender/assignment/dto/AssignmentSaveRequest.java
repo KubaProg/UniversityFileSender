@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
+import pl.polsl.universityfilesender.file.dto.FileDetailsDto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -26,7 +27,6 @@ public class AssignmentSaveRequest {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @NotNull(message = "Deadline date is required")
     private LocalDateTime deadlineDate;
-
 
     private List<MultipartFile> files;
 }

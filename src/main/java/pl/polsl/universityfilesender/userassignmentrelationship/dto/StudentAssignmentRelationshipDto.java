@@ -2,10 +2,9 @@ package pl.polsl.universityfilesender.userassignmentrelationship.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import pl.polsl.universityfilesender.file.dto.FileDto;
+import pl.polsl.universityfilesender.file.dto.FileDetailsDto;
 
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -19,7 +18,7 @@ public class StudentAssignmentRelationshipDto {
 
     private String studentLastName;
 
-    private List<FileDto> files;
+    private List<FileDetailsDto> files;
 
     private String status;
 

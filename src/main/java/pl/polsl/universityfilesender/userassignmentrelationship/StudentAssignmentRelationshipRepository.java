@@ -8,6 +8,7 @@ import pl.polsl.universityfilesender.assignment.Assignment;
 import pl.polsl.universityfilesender.user.User;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface StudentAssignmentRelationshipRepository extends JpaRepository<StudentAssignmentRelationship, Long> {
@@ -15,5 +16,5 @@ public interface StudentAssignmentRelationshipRepository extends JpaRepository<S
     List<StudentAssignmentRelationship> findAllByAssignmentId(Long assignment);
 
     @Query("SELECT sar FROM StudentAssignmentRelationship sar WHERE sar.student = :student AND sar.assignment = :assignment")
-    StudentAssignmentRelationship findByStudentAndAssignment(User student, Assignment assignment);
+    Optional<StudentAssignmentRelationship> findByStudentAndAssignment(User student, Assignment assignment);
 }

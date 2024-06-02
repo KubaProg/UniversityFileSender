@@ -76,6 +76,7 @@ public class AssignmentService {
                 File fileEntity = new File();
                 fileEntity.setFileName(file.getOriginalFilename());
                 fileEntity.setAssignment(assignment);
+                fileEntity.setFileType(file.getContentType());
                 try {
                     fileEntity.setData(file.getBytes());
                 } catch (IOException e) {

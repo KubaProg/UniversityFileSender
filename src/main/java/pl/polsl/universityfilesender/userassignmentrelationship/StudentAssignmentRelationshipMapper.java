@@ -5,6 +5,7 @@ import pl.polsl.universityfilesender.file.FileMapper;
 import pl.polsl.universityfilesender.user.User;
 import pl.polsl.universityfilesender.userassignmentrelationship.dto.StudentAssignmentRelationshipDto;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,7 +33,7 @@ public class StudentAssignmentRelationshipMapper {
             studentAssignmentRelationshipDto.setStudentLastName(student.getLastName());
         }
 
-        studentAssignmentRelationshipDto.setFiles(fileMapper.toDto(studentAssignmentRelationship.getFiles()));
+        studentAssignmentRelationshipDto.setFiles(fileMapper.toDtoList(new ArrayList<>(studentAssignmentRelationship.getFiles())));
         studentAssignmentRelationshipDto.setStatus(studentAssignmentRelationship.getStatus().toString());
 
         return studentAssignmentRelationshipDto;

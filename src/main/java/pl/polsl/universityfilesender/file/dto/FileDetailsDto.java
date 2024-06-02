@@ -5,8 +5,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class FileDto {
+public class FileDetailsDto {
     private Long id;
 
     private String fileName;
+
+    private String fileType;
+
+
 }
