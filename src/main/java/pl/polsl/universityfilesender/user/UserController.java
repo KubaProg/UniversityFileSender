@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import pl.polsl.universityfilesender.course.CourseService;
 import pl.polsl.universityfilesender.course.dto.CourseDto;
 import pl.polsl.universityfilesender.course.dto.SaveCourseRequest;
@@ -58,7 +57,7 @@ public class UserController {
 
     @GetMapping("/{userId}/assignments/{assignmentId}/download")
     @PreAuthorize("@userService.isAssignmentOwner(authentication, #assignmentId)")
-    public ResponseEntity<ByteArrayResource> downloadAssignment(@PathVariable("userId") Long userId, @PathVariable("assignmentId") Long assignmentId) {
+    public ResponseEntity<ByteArrayResource> downloadStudentAttachment(@PathVariable("userId") Long userId, @PathVariable("assignmentId") Long assignmentId) {
         ByteArrayResource resource = fileService.downloadAssignmentFiles(userId, assignmentId);
 
         return ResponseEntity.ok()

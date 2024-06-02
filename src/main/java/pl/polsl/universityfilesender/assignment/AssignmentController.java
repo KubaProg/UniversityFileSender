@@ -1,6 +1,8 @@
 package pl.polsl.universityfilesender.assignment;
 
 
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -45,5 +47,17 @@ public class AssignmentController {
         assignmentService.updateAssignment(assignmentId, assignmentSaveRequest);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/{assignmentId}/download")
+    @PreAuthorize("@userService.isAssignmentOwner(authentication, #assignmentId)")
+    public ResponseEntity<ByteArrayResource> downloadAssignment(@PathVariable("assignmentId") Long assignmentId) {
+        ByteArrayResource resource = assignmentService.downloadAssignment(assignmentId);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"assignment_files.zip\"")
+                .header(HttpHeaders.CONTENT_TYPE, "application/zip")
+                .body(resource);
+    }
+
 
 }

@@ -1,6 +1,9 @@
 package pl.polsl.universityfilesender.assignment;
 
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import pl.polsl.universityfilesender.assignment.dto.AssignmentGetDto;
 import pl.polsl.universityfilesender.assignment.dto.AssignmentSaveRequest;
 import pl.polsl.universityfilesender.assignment.dto.DetailedAssignmentDto;
@@ -13,11 +16,14 @@ import pl.polsl.universityfilesender.userassignmentrelationship.StudentAssignmen
 import pl.polsl.universityfilesender.userassignmentrelationship.StudentAssignmentRelationshipService;
 
 import javax.transaction.Transactional;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Service
 public class AssignmentService {
@@ -132,5 +138,35 @@ public class AssignmentService {
 
 
         assignmentRepository.save(assignment);
+    }
+
+    public ByteArrayResource downloadAssignment(Long assignmentId) {
+        Assignment assignment = getAssignmentById(assignmentId);
+        Set<File> files = assignment.getFiles();
+
+        if (files.isEmpty()) {
+            throw new EntityNotFoundException(File.class, "assignmentId", assignmentId.toString());
+        }
+
+        return createZipResource(files);
+    }
+
+
+    private ByteArrayResource createZipResource(Set<File> files) {
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+             ZipOutputStream zipOutputStream = new ZipOutputStream(byteArrayOutputStream)) {
+
+            for (File file : files) {
+                ZipEntry zipEntry = new ZipEntry(file.getFileName());
+                zipOutputStream.putNextEntry(zipEntry);
+                zipOutputStream.write(file.getData());
+                zipOutputStream.closeEntry();
+            }
+
+            zipOutputStream.finish();
+            return new ByteArrayResource(byteArrayOutputStream.toByteArray());
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error creating ZIP file", e);
+        }
     }
 }
