@@ -99,7 +99,7 @@ public class AssignmentService {
             StudentAssignmentRelationship studentAssignmentRelationship = new StudentAssignmentRelationship();
             studentAssignmentRelationship.setAssignment(assignment);
             studentAssignmentRelationship.setStudent(courseEnrollment.getStudent());
-            studentAssignmentRelationship.setStatus(StudentAssignmentRelationship.Status.PENDING);
+            studentAssignmentRelationship.setStatus(StudentAssignmentRelationship.Status.NOT_SUBMITTED);
             studentAssignmentRelationships.add(studentAssignmentRelationship);
         });
 

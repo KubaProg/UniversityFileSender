@@ -18,8 +18,8 @@ INSERT INTO assignment (id, assignment_name, description, deadline_date, course_
 INSERT INTO assignment (id, assignment_name, description, deadline_date, course_id) VALUES (NULL, 'Second Assignment', 'Complete the exercises from chapters 4-6', '2024-06-01', 1);
 
 -- Adding user assignment relationships
-INSERT INTO student_assignment_relationship (id, student_id, assignment_id, status) VALUES (NULL, 2, 1, 'PENDING');
-INSERT INTO student_assignment_relationship (id, student_id, assignment_id, status) VALUES (NULL, 2, 2, 'ACCEPTED');
+INSERT INTO student_assignment_relationship (id, student_id, assignment_id, status) VALUES (NULL, 2, 1, 'SUBMITTED');
+INSERT INTO student_assignment_relationship (id, student_id, assignment_id, status) VALUES (NULL, 2, 2, 'NOT_SUBMITTED');
 
 
 -- Adding a submission file

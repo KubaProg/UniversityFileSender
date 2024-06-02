@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
@@ -55,6 +54,16 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             ConstraintViolationException ex, WebRequest request) {
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST);
         apiError.setMessage("Constraint violation occurred: " + ex.getMessage());
+        return buildResponseEntity(apiError);
+    }
+
+
+    @ExceptionHandler(RuntimeException.class)
+    protected ResponseEntity<Object> handleRuntimeException(RuntimeException ex) {
+        String errorMessage = ex.getMessage();
+        HttpStatus status = INTERNAL_SERVER_ERROR;
+        ApiError apiError = new ApiError(status);
+        apiError.setMessage(errorMessage);
         return buildResponseEntity(apiError);
     }
 

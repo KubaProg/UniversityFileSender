@@ -37,7 +37,7 @@ public class StudentAssignmentRelationship {
 
 
     public enum Status {
-        PENDING, ACCEPTED
+        SUBMITTED, NOT_SUBMITTED
     }
 
 

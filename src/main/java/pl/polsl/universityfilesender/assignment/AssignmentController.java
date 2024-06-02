@@ -5,10 +5,14 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import pl.polsl.universityfilesender.assignment.dto.AssignmentSaveRequest;
 import pl.polsl.universityfilesender.assignment.dto.DetailedAssignmentDto;
 import pl.polsl.universityfilesender.assignment.dto.StudentAndAssignmentStatusDto;
+import pl.polsl.universityfilesender.assignment.dto.SubmitAssignmentRequest;
+import pl.polsl.universityfilesender.user.User;
+import pl.polsl.universityfilesender.userassignmentrelationship.StudentAssignmentRelationshipService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -18,11 +22,13 @@ import java.util.List;
 public class AssignmentController {
     private final AssignmentService assignmentService;
 
+    private final StudentAssignmentRelationshipService studentAssignmentRelationshipService;
 
-    public AssignmentController(AssignmentService assignmentService) {
+
+    public AssignmentController(AssignmentService assignmentService, StudentAssignmentRelationshipService studentAssignmentRelationshipService) {
         this.assignmentService = assignmentService;
+        this.studentAssignmentRelationshipService = studentAssignmentRelationshipService;
     }
-
 
     @GetMapping("/{assignmentId}")
     public ResponseEntity<DetailedAssignmentDto> getDetailedAssignment(@PathVariable("assignmentId") Long assignmentId) {
@@ -58,6 +64,15 @@ public class AssignmentController {
                 .header(HttpHeaders.CONTENT_TYPE, "application/zip")
                 .body(resource);
     }
+
+    @PutMapping("/{assignmentId}/submit")
+    @PreAuthorize("hasRole('ROLE_STUDENT') and @userService.isAssignmentOwner(authentication, #assignmentId)")
+    public ResponseEntity<Void> submitAssignment(@PathVariable("assignmentId") Long assignmentId,@Valid @ModelAttribute SubmitAssignmentRequest submitAssignmentRequest, @AuthenticationPrincipal User student) {
+        studentAssignmentRelationshipService.submitAssignment(student, submitAssignmentRequest, assignmentId);
+        return ResponseEntity.noContent().build();
+    }
+
+
 
 
 }
