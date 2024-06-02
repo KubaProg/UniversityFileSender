@@ -11,6 +11,7 @@ import pl.polsl.universityfilesender.user.User;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -80,5 +81,21 @@ public class CourseService {
 
         return courseMapper.toDtoList(courses);
 
+    }
+
+    public List<CourseDto> getNotAssignedCourses(User user) {
+        List<Course> allCourses = courseRepository.findAll();
+
+        List<CourseEnrollment> allStudentEnrollments = courseEnrollmentRepository.findAllByStudentId(user.getId());
+
+        Set<Long> enrolledCourseIds = allStudentEnrollments.stream()
+                .map(enrollment -> enrollment.getCourse().getId())
+                .collect(Collectors.toSet());
+
+        List<Course> notAssignedCourses = allCourses.stream()
+                .filter(course -> !enrolledCourseIds.contains(course.getId()))
+                .collect(Collectors.toList());
+
+        return courseMapper.toDtoList(notAssignedCourses);
     }
 }

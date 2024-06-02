@@ -72,4 +72,10 @@ public class UserController {
     public ResponseEntity<List<CourseDto>> getPendingCoursesforCurrentStudent(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(courseService.getPendingCoursesForStudent(user));
     }
+
+    @GetMapping("/current/courses/not-assigned")
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    public ResponseEntity<List<CourseDto>> getNotAssignedCoursesforCurrentStudent(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(courseService.getNotAssignedCourses(user));
+    }
 }
