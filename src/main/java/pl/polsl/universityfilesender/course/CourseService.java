@@ -64,6 +64,17 @@ public class CourseService {
         return currentUser.getId().equals(course.getTeacher().getId());
     }
 
+    public boolean isCourseParticipant(Authentication authentication, Long courseId) {
+        User currentUser = (User) authentication.getPrincipal();
+        Course course = getCourse(courseId);
+
+        List<CourseEnrollment> courseEnrollments = course.getCourseEnrollments();
+        Set<User> students = courseEnrollments.stream().map(CourseEnrollment::getStudent).collect(Collectors.toSet());
+
+
+        return students.stream().anyMatch(student -> student.getId().equals(currentUser.getId()));
+    }
+
     @Transactional
     public void deleteCourse(Long courseId) {
         courseRepository.deleteById(courseId);
