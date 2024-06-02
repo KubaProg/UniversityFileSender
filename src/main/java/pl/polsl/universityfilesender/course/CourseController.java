@@ -44,7 +44,7 @@ public class CourseController {
 
 
     @GetMapping("/{courseId}/assignments")
-    @PreAuthorize("@courseService.isCourseOwner(authentication, #courseId) and hasRole('ROLE_TEACHER')")
+//    @PreAuthorize("@courseService.isCourseOwner(authentication, #courseId) and hasRole('ROLE_TEACHER')")
     public ResponseEntity<List<AssignmentGetDto>> getAssignmentsByCourseId(@PathVariable("courseId") Long courseId) {
         return ResponseEntity.ok(assignmentService.getAllAssignmentsByCourseId(courseId));
     }
