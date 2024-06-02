@@ -71,7 +71,6 @@ public class AssignmentService {
         assignment.setCourse(course);
         assignment.setDeadlineDate(assignmentSaveRequest.getDeadlineDate());
 
-        if(!assignmentSaveRequest.getFiles().isEmpty()){
             Set<File> files = assignmentSaveRequest.getFiles().stream().map(file -> {
                 File fileEntity = new File();
                 fileEntity.setFileName(file.getOriginalFilename());
@@ -85,7 +84,6 @@ public class AssignmentService {
             }).collect(Collectors.toSet());
 
             assignment.setFiles(files);
-        }
 
 
 
