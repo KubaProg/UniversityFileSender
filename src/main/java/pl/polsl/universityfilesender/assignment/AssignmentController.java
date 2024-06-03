@@ -55,7 +55,7 @@ public class AssignmentController {
     }
 
     @GetMapping("/{assignmentId}/download")
-    @PreAuthorize("@userService.isAssignmentOwner(authentication, #assignmentId)")
+//    @PreAuthorize("@userService.isAssignmentOwner(authentication, #assignmentId)")
     public ResponseEntity<ByteArrayResource> downloadAssignment(@PathVariable("assignmentId") Long assignmentId) {
         ByteArrayResource resource = assignmentService.downloadAssignment(assignmentId);
 
