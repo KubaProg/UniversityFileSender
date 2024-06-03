@@ -6,9 +6,12 @@ import pl.polsl.universityfilesender.course.CourseRepository;
 import pl.polsl.universityfilesender.courseenrollment.dto.CourseEnrollmentDetailsDto;
 import pl.polsl.universityfilesender.exception.EntityNotFoundException;
 import pl.polsl.universityfilesender.user.User;
+import pl.polsl.universityfilesender.userassignmentrelationship.StudentAssignmentRelationship;
+import pl.polsl.universityfilesender.userassignmentrelationship.StudentAssignmentRelationshipRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseEnrollmentService {
@@ -18,10 +21,14 @@ public class CourseEnrollmentService {
 
     private final CourseRepository courseRepository;
 
-    public CourseEnrollmentService(CourseEnrollmentRepository courseEnrollmentRepository, CourseEnrollmentMapper courseEnrollmentMapper, CourseRepository courseRepository) {
+
+    private final StudentAssignmentRelationshipRepository studentAssignmentRelationshipRepository;
+
+    public CourseEnrollmentService(CourseEnrollmentRepository courseEnrollmentRepository, CourseEnrollmentMapper courseEnrollmentMapper, CourseRepository courseRepository, StudentAssignmentRelationshipRepository studentAssignmentRelationshipRepository) {
         this.courseEnrollmentRepository = courseEnrollmentRepository;
         this.courseEnrollmentMapper = courseEnrollmentMapper;
         this.courseRepository = courseRepository;
+        this.studentAssignmentRelationshipRepository = studentAssignmentRelationshipRepository;
     }
 
 
@@ -29,12 +36,26 @@ public class CourseEnrollmentService {
         return courseEnrollmentMapper.toDetailsDto(courseEnrollmentRepository.findAllByStatusAndCourseId(CourseEnrollment.Status.PENDING, courseId));
     }
 
+    @Transactional
     public void acceptEnrollment(Long enrollmentId) {
         CourseEnrollment courseEnrollment = courseEnrollmentRepository
                 .findById(enrollmentId)
                 .orElseThrow(() -> new EntityNotFoundException(CourseEnrollment.class, "id", String.valueOf(enrollmentId)));
 
         courseEnrollment.setStatus(CourseEnrollment.Status.ACCEPTED);
+
+        // create student-assignment relationships for all assignments in the course
+        Course course = courseEnrollment.getCourse();
+        List<StudentAssignmentRelationship> studentAssignmentRelationships = course.getAssignments().stream()
+                .map(assignment -> StudentAssignmentRelationship.builder()
+                        .student(courseEnrollment.getStudent())
+                        .assignment(assignment)
+                        .status(StudentAssignmentRelationship.Status.NOT_SUBMITTED)
+                        .build())
+                        .collect(Collectors.toList());
+
+        // save all student-assignment relationships
+        studentAssignmentRelationshipRepository.saveAll(studentAssignmentRelationships);
 
         courseEnrollmentRepository.save(courseEnrollment);
     }

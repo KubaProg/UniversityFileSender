@@ -1,5 +1,6 @@
 package pl.polsl.universityfilesender.userassignmentrelationship;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import pl.polsl.universityfilesender.assignment.Assignment;
@@ -14,6 +15,7 @@ import java.util.Set;
 @Table(name = "student_assignment_relationship")
 @Getter
 @Setter
+@Builder
 public class StudentAssignmentRelationship {
 
     @Id
@@ -34,6 +36,17 @@ public class StudentAssignmentRelationship {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    public StudentAssignmentRelationship() {
+
+    }
+
+    public StudentAssignmentRelationship(Long id, User student, Assignment assignment, Set<File> files, Status status) {
+        this.id = id;
+        this.student = student;
+        this.assignment = assignment;
+        this.files = files;
+        this.status = status;
+    }
 
 
     public enum Status {
