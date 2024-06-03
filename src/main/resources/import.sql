@@ -10,12 +10,13 @@ INSERT INTO course (id, course_name, teacher_id) VALUES (NULL, 'Introduction to 
 INSERT INTO course (id, course_name, teacher_id) VALUES (NULL, 'Introduction to Chemistry', 1);
 
 -- Adding user course relationship to make alice a student of the courses
-INSERT INTO course_enrollment (id, student_id, course_id, status) VALUES (NULL, 2, 1, 'PENDING');
-INSERT INTO course_enrollment (id, student_id, course_id, status) VALUES (NULL, 2, 2, 'ACCEPTED');
+INSERT INTO course_enrollment (id, student_id, course_id, status) VALUES (NULL, 2, 1, 'ACCEPTED');
+INSERT INTO course_enrollment (id, student_id, course_id, status) VALUES (NULL, 2, 2, 'PENDING');
 
 -- Adding an assignments
 INSERT INTO assignment (id, assignment_name, description, deadline_date, course_id) VALUES (NULL, 'First Assignment', 'Complete the exercises from chapters 1-3', '2024-06-01', 1);
 INSERT INTO assignment (id, assignment_name, description, deadline_date, course_id) VALUES (NULL, 'Second Assignment', 'Complete the exercises from chapters 4-6', '2024-06-01', 1);
+INSERT INTO assignment (id, assignment_name, description, deadline_date, course_id) VALUES (NULL, 'Third Assignment', 'Complete the exercises from chapters 7-9', '2024-06-01', 2);
 
 -- Adding user assignment relationships
 INSERT INTO student_assignment_relationship (id, student_id, assignment_id, status) VALUES (NULL, 2, 1, 'SUBMITTED');
